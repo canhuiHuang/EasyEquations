@@ -22,5 +22,5 @@
 >    x27
 >    17-x
 >
->![sst format example](/images/sstEx.jpg)
+>![sst format example](images/sstEx.png)
 >
