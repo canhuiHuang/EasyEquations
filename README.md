@@ -1,13 +1,13 @@
 # EasyEquations
 
->#### ssterm(sst) (Super Simple term):
+>### ssterm(sst) (Super Simple term):
 >ssterm puede tener una sola variable. Y esta no puede tener exponenciales de ningun tipo.
 >sst esta compuesto de:
 >- "np" (negative prefix), esta puede ser null.
 >- "c" (coefficient)
 >- "v" (variable)
 
->sst formato: ***np c v***
+>sst formato: ***np c v***  
 >![sst format example](images/sstEx.png)
 
 >Ejemplos de sst validos: 
