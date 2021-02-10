@@ -7,14 +7,13 @@
 >- "c" (coefficient)
 >- "v" (variable)
 >
->Entonces:
->sst formato --> np c v
+>sst formato: ***np c v***
 >Ejemplos de sst validos: 
->    -27x (np c v)
->    27x  (   c v)
->    -74  (np c  )
->    x    (     v)
->    -x   (np   v)
+>-    -27x (np c v)
+>-    27x  (   c v)
+>-    -74  (np c  )
+>-    x    (     v)
+>-    -x   (np   v)
 > 
 >Ejemplos de sst invalidos:
 >    -27x^2
