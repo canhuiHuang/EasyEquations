@@ -6,7 +6,7 @@
 >- "np" (negative prefix), esta puede ser null.
 >- "c" (coefficient)
 >- "v" (variable)
- 
+>
 >Entonces:
 >sst formato --> np c v
 >Ejemplos de sst validos: 
