@@ -1,7 +1,6 @@
 # EasyEquations
 
-
-#isTerm(arg,var):
+## isTerm(arg,var):
 Descripción: Determina si arg es un ssterm, var es char de la variable.
 Usage:  *string arg, char var*
                 eqString = "27x"
