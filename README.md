@@ -1,5 +1,12 @@
 # EasyEquations
 
+
+#isTerm(arg,var):
+Descripción: Determina si arg es un ssterm, var es char de la variable.
+Usage:  *string arg, char var*
+                eqString = "27x"
+                if isTerm(eqString):
+                    print("It is a ssterm!")
 >### ssterm(sst) (Super Simple term):
 >ssterm puede tener una sola variable. Y esta no puede tener exponenciales de ningun tipo.
 >sst esta compuesto de:
@@ -7,7 +14,7 @@
 >- "c" (coefficient)
 >- "v" (variable)
 
->sst formato: ***np c v***  
+>sst formato: ***np c v***<br>
 >![sst format example](images/sstEx.png)
 
 >Ejemplos de sst validos: 
@@ -18,8 +25,8 @@
 >-    -x   (np   v)
 
 >Ejemplos de sst invalidos:
->    -27x^2
->    27x^1
->    x27
->    17-x
+>-    -27x^2
+>-    27x^1
+>-    x27
+>-    17-x
 >
