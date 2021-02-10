@@ -1,11 +1,14 @@
 # EasyEquations
 
 ## isTerm(arg,var):
-Descripción: Determina si arg es un ssterm, var es char de la variable.
-Usage:  *string arg, char var*
-                eqString = "27x"
-                if isTerm(eqString):
-                    print("It is a ssterm!")
+>Descripción: Determina si arg es un ssterm, var es char de la variable.
+>Usage:  *string arg, char var*
+```py
+eqString = "27x"
+if isTerm(eqString):
+    print("It is a ssterm!")
+```
+
 >### ssterm(sst) (Super Simple term):
 >ssterm puede tener una sola variable. Y esta no puede tener exponenciales de ningun tipo.
 >sst esta compuesto de:
