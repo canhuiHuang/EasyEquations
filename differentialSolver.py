@@ -33,14 +33,29 @@ class Bracket:
 def isTerm(arg,var):    #Version Beta XD
     nprefix = '-'
     constants = ['1','2','3','4','5','6','7','8','9','0']
-    #ops = ['+', '-', '*', '/', '^']
+    ops = ['+', '*', '/', '^']
+    brackets = ['(', '[', '{', ')', ']', '}', '|']
 
     varPassed = False
 
-    itIsTerm = False
+    elemType = ""
     np = False
     c= ""
-    v= False
+    v= ''
+    varPassed= False
+
+    if len(arg) == 1 and arg in brackets:
+        elemType = "container"
+        return np,c,v, elemType
+    
+    if len(arg) == 1 and arg in ops:
+        elemType = "operator"
+        return np,c,v, elemType
+
+    if len(arg) > 1 and (arg[0] in brackets or arg[0] in ops or arg[0] == var):
+        elemType = "invalid"
+        return np,c,v, elemType
+
     for i in range(len(arg)):
         if arg[0] == nprefix:
             np = True
@@ -48,69 +63,172 @@ def isTerm(arg,var):    #Version Beta XD
         if arg[i] in constants:
             c += arg[i]
             if i + 1 == len(arg) and not varPassed:
-                itIsTerm = True
+                elemType = "term"
 
         elif arg[i] == var:
             if i + 1 == len(arg) and not varPassed:
-                itIsTerm = True
+                elemType = "term"
 
             varPassed = True
-            v = True
         else:   #not c nor v
             if c =="":
-                if v:
-                    itIsTerm = True
+                if varPassed:
+                    elemType = "term"
             if i == 0:
                 pass
             else:
-                itIsTerm = False
+                elemType = "invalid"
                 break
 
+    if varPassed:
+        v = var
+    return np, c, v, elemType
+
+class PrimaryTerm:
+    def __init__(self, np,c,v):
+        self.np = False
+        self.c = c
+        self.v = v
     
-    if np:
-        print(nprefix + " ", end = '')
-    print(c + " ", end = '')
-    if v:
-        print(var)
-    else:
-        print()
+    def term(self):
+        t = ""
+        if self.np:
+            t += '-'
+        t += self.c
+        t += self.v
+        return t
 
-    return itIsTerm
+class Container:
+    def __init__(self, symbol, customType = ""):
+        self.bar = "| |"
+        self.symbol = symbol
+        self.type = ""
+        if symbol in ['(', '[', '{']:
+            self.type = "open" 
+        elif symbol in [')', ']', '}']:
+            self.type = "closed" 
+        elif symbol == '|':
+            self.type = customType
 
-        
-    
+    def term(self):
+        return self.symbol
 
+class Operator:
+    def __init__(self, op, operation = ""):
+        self.op = op
 
-        
-        
-        
-        
+    def term(self):
+        return self.op
 
-    
-
-
-op = ['+','*','/','^','sqrt'] #Ignorando neg. - por el momento.
+ops = ['+','*','/','^','sqrt'] #Ignorando neg. - por el momento.
 
 openBrackets = ['(', '[', '{']
 closeBrackets = [')', ']', '}']
-brackets = ['(', '[', '{', ')', ']', '}']
+brackets = ['(', '[', '{', ')', ']', '}', '|']
 
-ec = "(x^7 + (7/3)x^(x+3))/((-8x^7 + 9)^(1/2))"
+ec = "(12x^7 + (72/3)x^(x+3))/((-83x^7 + 9)^(1/2))"
 
-arbol1 = Tree(ec[0])
-term = ""
+
 #for i in range(1,len(ec)):
 #    term += "ec[i]"
 #    if isTerm
 
-#l = ["x^7","-231x^", "123", "x", "-231", "-x^"]
-l = ["x37","x3", "+", "1", "-1", "-23", "x", "-x", "761x", "-238x", "-37x-", "-37xx"]
+l = ["x^7","-231x^", "123", "x", "-231", "-x^"]
+#for var in l:
+#    np,c,v, esTermino = isTerm(var, 'x')
+#    tempObj = Ssterm(np,c,v)
+#    print(tempObj.term())
 
-for var in l:
-    if isTerm(var, 'x'):
-        print("si")
-    else:
-        print("no")
+var = 'x'
+arbol1 = Tree()
+term = ""
+elems = []
+prevNpCVE = []
+
+i = 0
+while i < len(ec):
+    if ec[i] != ' ':
+        term += ec[i]
+    np, c, v, elemType = isTerm(term, var)
+
+    if elemType == "invalid":
+        term = term[:-1]
+        
+        i -= 1
+
+        if prevNpCVE[3] == "term":
+            elems.append(PrimaryTerm(prevNpCVE[0],prevNpCVE[1],prevNpCVE[2]))
+        elif prevNpCVE[3] == "container":
+            elems.append(Container(term))
+        elif prevNpCVE[3] == "operator":
+            elems.append(Operator(term))
+
+        if i + 2 == len(ec):
+            elems.append(Container(ec[i + 1]))
+
+        term = ""
+    elif i + 1 == len(ec) and elemType == "term":
+        elems.append(PrimaryTerm(np,c,v))
+
+    prevNpCVE = [np, c, v, elemType]
+    i += 1
+
+#
+print("[", end = '')
+for elem in elems:
+    print("'", elem.term(), "'", end = '')
+print("]")
+
+arbol1.init(elems[0])
+i = 1
+while i < len(elems):
+    if elems[i - 1].term() in openBrackets:
+        arbol1.addChild(elems[i])
+        print(elems[i].term(),end = '')
+    elif elems[i].term() in ops:
+        if elems[i + 1].term() in openBrackets:
+            arbol1.addSibling(elems[i + 1],elems[i])
+            arbol1.addChild(elems[i + 2])
+            print(elems[i].term(), elems[i+1].term(), elems[i+2].term(),end = '')
+            i+=2
+        else:
+            arbol1.addSibling(elems[i + 1], elems[i])
+            print(elems[i].term(),elems[i+1].term(),end = '')
+            i+=1
+    elif elems[i].term() in openBrackets:
+        arbol1.addSibling(elems[i],'*')
+        arbol1.addChild(elems[i + 1])
+        print(elems[i].term(),elems[i+1].term(),end = '')
+        i+=1
+    elif elems[i].term() in closeBrackets and i+1 < len(elems):
+        arbol1.toParent()
+        print(")",end = '')
+    elif elems[i - 1].term() in closeBrackets:
+        if elems[i].term() in openBrackets:
+            arbol1.addSibling(elems[i], '*')
+            arbol1.addChild(elems[i + 1])
+            print(elems[i].term(), elems[i + 1].term(),end = '')
+            i+=1
+        elif elems[i].term() in ops:
+            arbol1.addSibling(elems[i+1], elems[i])
+            print(elems[i].term(),elems[i+1].term(),end = '')
+            i+=1
+        elif elems[i].term() not in ops and elems[i].term() not in brackets:
+            arbol1.addSibling(elems[i], "*")
+            print(elems[i].term(),end = '')
+        else:
+            arbol1.toParent()
+            print(")",end = '')        
+    i+=1
+print()
+
+arbol1.trasversal()
+
+
+
+    
+
+
 
 
 

@@ -16,19 +16,27 @@ class TreeNode:
         self.children.pop()
 
 class Tree: #A tree with curNode. Always tracks curNode
-    def __init__(self, data, depth = 0):
-        self.root = TreeNode(data)
-        self.root.isRoot = True
+    def __init__(self):
+        self.root = None
         self.curNode = self.root
 
     def addChild(self,data):
         tempNode = TreeNode(data, self.curNode.depth + 1, self.curNode)
         self.curNode.addChild(tempNode)
         self.curNode = tempNode
+
+    def init(self, data):
+        self.root = TreeNode(data)
+        self.root.isRoot = True
+        self.curNode = self.root
+
+    def updateNode(self,data):
+        self.curNode.data = data
     
     def addSibling(self, data, op):
         tempNode = TreeNode(data, self.curNode.depth, self.curNode.parent)
-        self.curNode.parent.addChild(tempNode)
+        if self.curNode.parent != None:
+            self.curNode.parent.addChild(tempNode)
         self.curNode.rightSibling = tempNode
         self.curNode.rightRelation = op
         self.curNode = tempNode
@@ -50,7 +58,7 @@ class Tree: #A tree with curNode. Always tracks curNode
             #if not node.isRoot():
             #    print(node.data, end = '')
 
-            print(node.data)
+            print(node.data.term())
 
             if node.isRoot and ignoreChildren:
                 return

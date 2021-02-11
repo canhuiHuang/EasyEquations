@@ -6,9 +6,9 @@ class Bracket:
         self.index = index
 
 
-
+'''
 #TEsting
-arbol = Tree(1)
+arbol = Tree()
 arbol.showCurNode()
 
 arbol.addChild(2)
@@ -58,7 +58,7 @@ arbol.toParent()
 print("\n\n\n")
 
 arbol.trasversal()
-
+'''
 
     
 
@@ -75,7 +75,17 @@ brackets = ['(', '[', '{', ')', ']', '}']
 
 test = "(x^7 + (7/3)x^(x+3))/((-8x^7 + 9)^(1/2))"
 
-stack = []
+print(test)
+test = test[:-1]
+print(test)
+test = test[:-1]
+print(test)
+test = test[:-1]
+print(test)
+
+for i in range(10):
+    print(i)
+    i -= 1
 
 
 
