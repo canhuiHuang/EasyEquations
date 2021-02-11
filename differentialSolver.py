@@ -196,7 +196,7 @@ while i < len(elems):
             print(elems[i].term(),elems[i+1].term(),end = '')
             i+=1
     elif elems[i].term() in openBrackets:
-        arbol1.addSibling(elems[i],'*')
+        #arbol1.addSibling(elems[i],'*')
         arbol1.addChild(elems[i + 1])
         print(elems[i].term(),elems[i+1].term(),end = '')
         i+=1
@@ -223,6 +223,7 @@ while i < len(elems):
 print()
 
 arbol1.trasversal()
+arbol1
 
 
 

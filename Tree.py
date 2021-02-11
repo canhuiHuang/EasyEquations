@@ -37,8 +37,9 @@ class Tree: #A tree with curNode. Always tracks curNode
         tempNode = TreeNode(data, self.curNode.depth, self.curNode.parent)
         if self.curNode.parent != None:
             self.curNode.parent.addChild(tempNode)
-        self.curNode.rightSibling = tempNode
         self.curNode.rightRelation = op
+        self.curNode.rightSibling = tempNode
+        
         self.curNode = tempNode
 
     def showCurNode(self):
@@ -61,9 +62,13 @@ class Tree: #A tree with curNode. Always tracks curNode
             print(node.data.term())
 
             if node.isRoot and ignoreChildren:
+                if node.rightSibling:
+                #print(node.rightRelation, end = '')
+                    node = node.rightSibling
+                    itrasversal(node)
                 return
 
-            if node.children and not ignoreChildren:
+            elif node.children and not ignoreChildren:
                 node = node.children[0]
                 itrasversal(node)
         
