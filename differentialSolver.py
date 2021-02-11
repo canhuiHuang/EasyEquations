@@ -86,6 +86,7 @@ def isTerm(arg,var):    #Version Beta XD
 
 class PrimaryTerm:
     def __init__(self, np,c,v):
+        self.type = "primaryterm"
         self.np = False
         self.c = c
         self.v = v
@@ -100,22 +101,39 @@ class PrimaryTerm:
 
 class Container:
     def __init__(self, symbol, customType = ""):
-        self.bar = "| |"
-        self.symbol = symbol
-        self.type = ""
-        if symbol in ['(', '[', '{']:
-            self.type = "open" 
-        elif symbol in [')', ']', '}']:
-            self.type = "closed" 
-        elif symbol == '|':
-            self.type = customType
+        self.initialSymbol = symbol
+        self.type = "container"
+        self.symbol = ""
+        self.typeState = -1
+        if self.initialSymbol in ['(','[','{']:
+            self.typeState = 0
+        else:
+            self.typeState = 1
 
-    def term(self):
-        return self.symbol
+        if symbol in ['(', ')']:
+            self.symbol = "()"
+        elif symbol in ['[', ']']:
+            self.symbol = "[]" 
+        elif symbol in ['{', '}']:
+            self.symbol = '{' + '}' 
+        elif symbol == '|':
+            self.symbol = "||" 
+
+    def term(self, mode = "static"):
+        if mode == "dynamic":
+            if self.typeState == 0:
+                self.typeState = 1
+                return self.symbol[0]
+            else:
+                self.typeState = 0
+                return self.symbol[1]
+        elif mode == "static":
+            return self.initialSymbol
 
 class Operator:
     def __init__(self, op, operation = ""):
         self.op = op
+        self.type = "operator"
 
     def term(self):
         return self.op
@@ -187,9 +205,13 @@ while i < len(elems):
         print(elems[i].term(),end = '')
     elif elems[i].term() in ops:
         if elems[i + 1].term() in openBrackets:
+            #arbol1.showInfo()
             arbol1.addSibling(elems[i + 1],elems[i])
+            #arbol1.showInfo()
             arbol1.addChild(elems[i + 2])
+            #arbol1.showInfo()
             print(elems[i].term(), elems[i+1].term(), elems[i+2].term(),end = '')
+            
             i+=2
         else:
             arbol1.addSibling(elems[i + 1], elems[i])
@@ -205,7 +227,7 @@ while i < len(elems):
         print(")",end = '')
     elif elems[i - 1].term() in closeBrackets:
         if elems[i].term() in openBrackets:
-            arbol1.addSibling(elems[i], '*')
+            arbol1.addSibling(elems[i], Operator('*'))
             arbol1.addChild(elems[i + 1])
             print(elems[i].term(), elems[i + 1].term(),end = '')
             i+=1
@@ -214,7 +236,7 @@ while i < len(elems):
             print(elems[i].term(),elems[i+1].term(),end = '')
             i+=1
         elif elems[i].term() not in ops and elems[i].term() not in brackets:
-            arbol1.addSibling(elems[i], "*")
+            arbol1.addSibling(elems[i], Operator('*'))
             print(elems[i].term(),end = '')
         else:
             arbol1.toParent()
@@ -223,7 +245,6 @@ while i < len(elems):
 print()
 
 arbol1.trasversal()
-arbol1
 
 
 

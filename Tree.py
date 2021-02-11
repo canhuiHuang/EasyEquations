@@ -4,13 +4,16 @@ class TreeNode:
         self.children = []
         self.parent = parent
         self.rightSibling = None
-        self.rightRelation = None
+        self.rightRelation = ''
         self.leftSibling = None
         self.depth = depth
         self.isRoot = False
     
     def addChild(self, treeNode):
         self.children.append(treeNode)
+
+    def setRightRelation(self,op):
+        self.rightRelation = op
     
     def removeChild(self, node):
         self.children.pop()
@@ -30,6 +33,10 @@ class Tree: #A tree with curNode. Always tracks curNode
         self.root.isRoot = True
         self.curNode = self.root
 
+    def showInfo(self):
+        print("Me: ", self.curNode.data.term())
+        print("rOp: ", self.curNode.rightRelation)
+
     def updateNode(self,data):
         self.curNode.data = data
     
@@ -37,7 +44,7 @@ class Tree: #A tree with curNode. Always tracks curNode
         tempNode = TreeNode(data, self.curNode.depth, self.curNode.parent)
         if self.curNode.parent != None:
             self.curNode.parent.addChild(tempNode)
-        self.curNode.rightRelation = op
+        self.curNode.setRightRelation(op)
         self.curNode.rightSibling = tempNode
         
         self.curNode = tempNode
@@ -59,9 +66,16 @@ class Tree: #A tree with curNode. Always tracks curNode
             #if not node.isRoot():
             #    print(node.data, end = '')
 
-            print(node.data.term())
+            if node.data.type != "container":
+                print(node.data.term(), end = '')
+                if node.rightSibling:
+                    print(node.rightRelation.term(), end = '')
+            else:
+                print(node.data.term("dynamic"), end = '')
+                if node.rightSibling and node.data.typeState == 1:
+                    print(node.rightRelation.term(), end = '')
 
-            if node.isRoot and ignoreChildren:
+            if node.depth == self.root.depth and ignoreChildren:
                 if node.rightSibling:
                 #print(node.rightRelation, end = '')
                     node = node.rightSibling
