@@ -1,4 +1,4 @@
-# EasyEquations
+# ABANDONED
 
 ## isTerm(arg,var):
 >Descripción: Determina si arg es un ssterm, var es char de la variable. <br>
